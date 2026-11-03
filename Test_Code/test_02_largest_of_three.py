@@ -1,9 +1,20 @@
-import importlib
+import importlib.util
+from pathlib import Path
 
-m = importlib.import_module("Code.02_largest_of_three")
+code_path = (
+    Path(__file__).resolve().parents[1]
+    / "Code"
+    / "02_largest_of_three.py"
+)
 
-assert m.largest_of_three(10, 25, 15) == 25
-assert m.largest_of_three(5, 2, 1) == 5
-assert m.largest_of_three(-1, -5, -2) == -1
+spec = importlib.util.spec_from_file_location(
+    "largest", code_path
+)
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
 
-print("Test 2 passed")
+assert mod.largest_of_three(3, 9, 4) == 9
+assert mod.largest_of_three(-5, -2, -8) == -2
+assert mod.largest_of_three(4, 4, 1) == 4
+
+print("Test 02 passed")
